@@ -1,0 +1,112 @@
+---
+title: "ducksf. Some Alternatives to sf Functions And This is a Working Title"
+format: gfm
+---
+
+<!-- README.md is generated from README.qmd. Please edit that file -->
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+
+is_html <- knitr::is_html_output()
+```
+
+# ducksf
+
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN status](https://www.r-pkg.org/badges/version/ducksf)](https://CRAN.R-project.org/package=ducksf)
+<!-- badges: end -->
+
+This package provides some alternatives to sf functions, which are implemented using duckdb and geoarrow. It is intended to be used with duckdb and duckspatial. I have no idea where this project will go, use at your own risk.
+
+`ducksf` provides **fast, DuckDB Spatial–backed spatial data operations** for R,  
+with a focus on **areal-weighted interpolation** as a drop-in alternative to  
+`sf::st_interpolate_aw()` and `areal::aw_interpolate()`.
+
+
+## Installation
+
+You can install the development version of ducksf from [GitHub](https://github.com/e-kotov/ducksf) with:
+
+``` r
+# install.packages("pak")
+pak::pak("e-kotov/ducksf")
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+## Quick example (using the default `sf` dataset)
+library(sf)
+library(ducksf)
+
+# data & grid (from sf help)
+nc <- st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+g <- st_make_grid(nc, n = c(10, 5)) # 'to' can be sfc for sf, but ducksf core needs an sf with an ID
+
+# Prepare IDs for ducksf core
+nc$src_id <- seq_len(nrow(nc))
+g_sf <- st_as_sf(g)
+g_sf$tid <- seq_len(nrow(g_sf))
+
+## 1) ducksf core (dst_interpolate_aw) --------------------------------------
+
+# (a) Treat BIR74 as spatially intensive (not mass-preserving)
+a1_core <- dst_interpolate_aw(
+  target_sf = g_sf,
+  tid = "tid",
+  source_sf = nc,
+  sid = "src_id",
+  weight = "sum", # intensive semantics
+  intensive = "BIR74",
+  output = "sf"
+)
+sum(st_drop_geometry(a1_core)$BIR74, na.rm = TRUE) / sum(nc$BIR74, na.rm = TRUE)
+
+# (b) Treat BIR74 as spatially extensive (mass-preserving)
+a2_core <- dst_interpolate_aw(
+  target_sf = g_sf,
+  tid = "tid",
+  source_sf = nc,
+  sid = "src_id",
+  weight = "total", # extensive semantics (pycnophylactic)
+  extensive = "BIR74",
+  output = "sf"
+)
+sum(st_drop_geometry(a2_core)$BIR74, na.rm = TRUE) / sum(nc$BIR74, na.rm = TRUE)
+
+# Quick plot (intensive vs extensive)
+a_show <- a1_core[, "BIR74"]
+names(a_show)[1] <- "intensive"
+a_show$extensive <- st_drop_geometry(a2_core)$BIR74
+plot(a_show[c("intensive", "extensive")], key.pos = 4)
+
+## 2) Masked drop-in (sf semantics) -----------------------------------------
+
+# Enable masking so st_interpolate_aw() dispatches to ducksf
+sf_use_ducksf(TRUE) # or: ducksf_use(TRUE, allow = "st_interpolate_aw")
+sf_use_ducksf(FALSE) # or: ducksf_use(TRUE, allow = "st_interpolate_aw")
+
+a1 <- st_interpolate_aw(nc["BIR74"], g, extensive = FALSE)
+sum(a1$BIR74) / sum(nc$BIR74) # not close to 1 (intensive)
+
+a2 <- st_interpolate_aw(nc["BIR74"], g, extensive = TRUE)
+sum(a2$BIR74) / sum(nc$BIR74) # ≈ 1 (mass-preserving)
+
+# Compare maps exactly like sf's example
+a1$intensive <- a1$BIR74
+a1$extensive <- a2$BIR74
+plot(a1[c("intensive", "extensive")], key.pos = 4)
+
+# Disable masking when done
+ducksf_use(FALSE)
+```

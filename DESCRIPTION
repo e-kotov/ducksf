@@ -1,0 +1,32 @@
+Package: ducksf
+Title: Some Alternatives to sf Functions And This is a Working Title
+Version: 0.0.0.9000
+Authors@R: 
+    person("Egor", "Kotov", , "kotov.egor@gmail.com", role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0001-6690-5345"))
+Description: This package provides some alternatives to sf functions,
+    which are implemented using duckdb and geoarrow. It is intended to be
+    used with duckdb and duckspatial. I have no idea where this project
+    will go, use at your own risk.
+License: MIT + file LICENSE
+Imports: 
+    arrow,
+    DBI,
+    dplyr,
+    duckdb,
+    geoarrow,
+    glue,
+    sf,
+    wk,
+    rlang
+Suggests: 
+    areal,
+    quarto,
+    testthat (>= 3.0.0)
+VignetteBuilder: 
+    quarto
+Config/testthat/edition: 3
+Encoding: UTF-8
+Language: en
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
