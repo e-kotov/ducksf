@@ -117,6 +117,7 @@ library(geodata)
 library(areal)
 library(tidyverse)
 library(ducksf)
+library(bench)
 
 
 # download may take > 5s
