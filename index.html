@@ -5,20 +5,32 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Some Alternatives to sf Functions And This is a Working Title • ducksf</title>
+<title>ducksf • ducksf</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Some Alternatives to sf Functions And This is a Working Title">
-<meta name="description" content="This package provides some alternatives to sf functions, which are implemented using duckdb and geoarrow. It is intended to be used with duckdb and duckspatial. I have no idea where this project will go, use at your own risk.">
-<meta property="og:description" content="This package provides some alternatives to sf functions, which are implemented using duckdb and geoarrow. It is intended to be used with duckdb and duckspatial. I have no idea where this project will go, use at your own risk.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="ducksf">
+<meta name="description" content="ducksf">
+<meta property="og:description" content="ducksf">
+<meta property="og:image" content="http://www.ekotov.pro/ducksf/reference/figures/card.png">
+<meta property="og:image:alt" content="ducksf: Spatial Ops Faster Than sf and geos">
+<!-- counter.dev analytics --><script data-goatcounter="https://jukadipos.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script><!-- counter.dev analytics --><script src="https://cdn.counter.dev/script.js" data-id="7e3e8d31-9a84-48b0-a678-a00715236a90" data-utcoffset="1"></script><script>
+ (function(h,o,t,j,a,r){
+     h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+     h._hjSettings={hjid:3578286,hjsv:6};
+     a=o.getElementsByTagName('head')[0];
+     r=o.createElement('script');r.async=1;
+     r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+     a.appendChild(r);
+ })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+</script>
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
-    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
 
     <a class="navbar-brand me-2" href="index.html">ducksf</a>
 
@@ -37,6 +49,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/e-kotov/ducksf/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -45,22 +58,25 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="ducksf-some-alternatives-to-sf-functions-and-this-is-a-working-title">ducksf. Some Alternatives to sf Functions And This is a Working Title<a class="anchor" aria-label="anchor" href="#ducksf-some-alternatives-to-sf-functions-and-this-is-a-working-title"></a>
-</h1></div>
-<!-- README.md is generated from README.qmd. Please edit that file -->
-</div>
-<div class="section level1">
-<h1 id="ducksf">ducksf<a class="anchor" aria-label="anchor" href="#ducksf"></a>
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="ducksf-spatial-ops-faster-than-sf-and-geos-">ducksf: Spatial Ops Faster Than sf and geos 
+<a class="anchor" aria-label="anchor" href="#ducksf-spatial-ops-faster-than-sf-and-geos-"></a>
 </h1>
+</div>
 <!-- badges: start -->
 
-<p>This package provides some alternatives to sf functions, which are implemented using duckdb and geoarrow. It is intended to be used with duckdb and duckspatial. I have no idea where this project will go, use at your own risk.</p>
+<p>This package provides some alternatives to sf functions, which are implemented using duckdb and geoarrow. So far the only implemented function is areal interpolation working similar to the one fiund in ‘areal’ package, but much faster. I have no idea where this project will go, use at your own risk.</p>
 <p><code>ducksf</code> provides <strong>fast, DuckDB Spatial–backed spatial data operations</strong> for R,<br>
-with a focus on <strong>areal-weighted interpolation</strong> as a drop-in alternative to<br><code><a href="https://r-spatial.github.io/sf/reference/interpolate_aw.html" class="external-link">sf::st_interpolate_aw()</a></code> and <code><a href="https://slu-openGIS.github.io/areal/reference/aw_interpolate.html" class="external-link">areal::aw_interpolate()</a></code>.</p>
+with a current focus on <strong>areal-weighted interpolation</strong> as a drop-in alternative to<br><code><a href="https://r-spatial.github.io/sf/reference/interpolate_aw.html" class="external-link">sf::st_interpolate_aw()</a></code> and <code><a href="https://slu-openGIS.github.io/areal/reference/aw_interpolate.html" class="external-link">areal::aw_interpolate()</a></code>.</p>
+<p>Here are the speed boosts and memory savings you can expect:</p>
+<p><img src="reference/figures/vis-test-total.png"></p>
+<p><img src="reference/figures/vis-test-sum.png"></p>
+<p>As you can see from the figures, <code>ducksf</code> is much faster than than <code><a href="https://slu-openGIS.github.io/areal/reference/aw_interpolate.html" class="external-link">areal::aw_interpolate()</a></code> (and <code><a href="https://r-spatial.github.io/sf/reference/interpolate_aw.html" class="external-link">sf::st_interpolate_aw()</a></code>, as it works the same way, but is functionally more limited), especially for large datasets. It also uses less memory, which is crucial when working with large spatial datasets. Even though there is a cost of translating <code>sf</code> objects to DuckDB tables and back, the overall performance is significantly improved.</p>
+<p>The misterious <code>geosareal</code> package is just a proof-of-concept package that also implements areal interpolation, but using <code>geos</code> instead of <code>duckdb</code>. It is not meant to be used in production and is not maintained, but the code is available here: <a href="https://github.com/e-kotov/r-geos-areal-weighted-interpolation-prototype" class="external-link uri">https://github.com/e-kotov/r-geos-areal-weighted-interpolation-prototype</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of ducksf from <a href="https://github.com/e-kotov/ducksf" class="external-link">GitHub</a> with:</p>
+<p>You can install the development version of <a href="https://github.com/e-kotov/ducksf" class="external-link">ducksf</a> from <a href="https://github.com/e-kotov/ducksf" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"e-kotov/ducksf"</span><span class="op">)</span></span></code></pre></div>
@@ -72,7 +88,7 @@ with a focus on <strong>areal-weighted interpolation</strong> as a drop-in alter
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Quick example (using the default `sf` dataset)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.ekotov.pro/ducksf/">ducksf</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/e-kotov/ducksf" class="external-link">ducksf</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># data &amp; grid (from sf help)</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -113,11 +129,16 @@ with a focus on <strong>areal-weighted interpolation</strong> as a drop-in alter
 <span><span class="va">a_show</span> <span class="op">&lt;-</span> <span class="va">a1_core</span><span class="op">[</span>, <span class="st">"BIR74"</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">a_show</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"intensive"</span></span>
 <span><span class="va">a_show</span><span class="op">$</span><span class="va">extensive</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">a2_core</span><span class="op">)</span><span class="op">$</span><span class="va">BIR74</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">a_show</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"intensive"</span>, <span class="st">"extensive"</span><span class="op">)</span><span class="op">]</span>, key.pos <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">a_show</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"intensive"</span>, <span class="st">"extensive"</span><span class="op">)</span><span class="op">]</span>, key.pos <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="mask-sf-functions">Mask <code>{sf}</code> functions<a class="anchor" aria-label="anchor" href="#mask-sf-functions"></a>
+</h2>
+<p><a href="https://github.com/e-kotov/ducksf" class="external-link">ducksf</a> also provides a way to <strong>mask <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> functions</strong> so that they dispatch to <a href="https://github.com/e-kotov/ducksf" class="external-link">ducksf</a> instead of <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a>. This is useful if you want to use <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> functions with <a href="https://github.com/e-kotov/ducksf" class="external-link">ducksf</a> semantics without changing your code too much. By default it is of course disabled, so you can use <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> functions as usual even if <a href="https://github.com/e-kotov/ducksf" class="external-link">ducksf</a> is loaded. The resulting numbers will be insignificantly different from <a href="https://r-spatial.github.io/sf/" class="external-link">sf</a> results due to rounding errors, but they will be very close.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">## 2) Masked drop-in (sf semantics) -----------------------------------------</span></span>
 <span></span>
-<span><span class="co">## 2) Masked drop-in (sf semantics) -----------------------------------------</span></span>
-<span></span>
-<span><span class="co"># Enable masking so st_interpolate_aw() dispatches to ducksf</span></span>
+<span><span class="co"># Enable/disable masking so st_interpolate_aw() dispatches to ducksf</span></span>
 <span><span class="fu"><a href="reference/sf_use_ducksf.html">sf_use_ducksf</a></span><span class="op">(</span><span class="cn">TRUE</span><span class="op">)</span> <span class="co"># or: sf_use_ducksf(TRUE, allow = "st_interpolate_aw")</span></span>
 <span><span class="fu"><a href="reference/sf_use_ducksf.html">sf_use_ducksf</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="co"># or: sf_use_ducksf(TRUE, allow = "st_interpolate_aw")</span></span>
 <span></span>
@@ -135,32 +156,46 @@ with a focus on <strong>areal-weighted interpolation</strong> as a drop-in alter
 <span><span class="co"># Disable masking when done</span></span>
 <span><span class="fu"><a href="reference/sf_use_ducksf.html">sf_use_ducksf</a></span><span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
-</div>
-<div class="section level1">
-<h1 id="to-test-speed-on-relatively-large-data">To test speed on relatively large data<a class="anchor" aria-label="anchor" href="#to-test-speed-on-relatively-large-data"></a>
-</h1>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.duckdb.org/" class="external-link">duckdb</a></span><span class="op">)</span></span>
+<div class="section level2">
+<h2 id="to-test-speed-on-relatively-large-data">To test speed on relatively large data<a class="anchor" aria-label="anchor" href="#to-test-speed-on-relatively-large-data"></a>
+</h2>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"duckdb"</span>,</span>
+<span>    <span class="st">"sf"</span>,</span>
+<span>    <span class="st">"areal"</span>,</span>
+<span>    <span class="st">"geoarrow"</span>,</span>
+<span>    <span class="st">"terra"</span>,</span>
+<span>    <span class="st">"geodata"</span>,</span>
+<span>    <span class="st">"giscoR"</span>,</span>
+<span>    <span class="st">"tidyverse"</span>,</span>
+<span>    <span class="st">"tictoc"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html" class="external-link">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r.duckdb.org/" class="external-link">duckdb</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://chris-prener.github.io/areal/" class="external-link">areal</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://geoarrow.org/geoarrow-r/" class="external-link">geoarrow</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">geodata</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ropengov.github.io/giscoR/" class="external-link">giscoR</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://chris-prener.github.io/areal/" class="external-link">areal</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://www.ekotov.pro/ducksf/">ducksf</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bench.r-lib.org/" class="external-link">bench</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jabiru/tictoc" class="external-link">tictoc</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/e-kotov/ducksf" class="external-link">ducksf</a></span><span class="op">)</span> <span class="co"># remotes::install_github("e-kotov/ducksf")</span></span>
+<span><span class="co"># also optional if you want to try it yourself, geosareal also does quite well compared to sf-based interpolation</span></span>
+<span><span class="co"># library(geosareal) # remotes::install_github("e-kotov/r-geos-areal-weighted-interpolation-prototype")</span></span>
 <span></span>
-<span></span>
-<span><span class="co"># download may take &gt; 5s</span></span>
+<span><span class="co"># get data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="st">"private/data"</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">pop</span> <span class="op">&lt;-</span> <span class="fu">geodata</span><span class="fu">::</span><span class="fu">population</span><span class="op">(</span>year <span class="op">=</span> <span class="fl">2020</span>, res <span class="op">=</span> <span class="fl">2.5</span>, path <span class="op">=</span> <span class="st">"private/data"</span><span class="op">)</span> <span class="co"># GPWv4 density</span></span>
 <span><span class="va">nuts2</span> <span class="op">&lt;-</span> <span class="fu">giscoR</span><span class="fu">::</span><span class="fu">gisco_get_nuts</span><span class="op">(</span>year <span class="op">=</span> <span class="st">"2021"</span>, nuts_level <span class="op">=</span> <span class="fl">2</span>, epsg <span class="op">=</span> <span class="st">"4326"</span><span class="op">)</span></span>
-<span></span>
 <span><span class="va">fr2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">nuts2</span>, <span class="va">CNTR_CODE</span> <span class="op">==</span> <span class="st">"FR"</span><span class="op">)</span></span>
-<span></span>
 <span><span class="va">fr2_mainland</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">fr2</span>, <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^FRY|^FRM"</span>, <span class="va">NUTS_ID</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># plot(st_geometry(fr2_mainland), main = "France NUTS-2 regions (2021)")</span></span>
 <span></span>
 <span><span class="co"># crop pop raster to mainland France</span></span>
 <span><span class="va">pop_fr</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu">crop</span><span class="op">(</span></span>
@@ -168,10 +203,8 @@ with a focus on <strong>areal-weighted interpolation</strong> as a drop-in alter
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="va">fr2_mainland</span><span class="op">)</span>,</span>
 <span>  snap <span class="op">=</span> <span class="st">"out"</span></span>
 <span><span class="op">)</span></span>
-<span></span>
 <span><span class="co"># mask</span></span>
 <span><span class="va">pop_fr</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu">mask</span><span class="op">(</span><span class="va">pop_fr</span>, <span class="va">fr2_mainland</span><span class="op">)</span></span>
-<span><span class="co"># plot(pop_fr, main = "GPWv4 Population Density in Mainland France (2020)")</span></span>
 <span></span>
 <span><span class="co"># project the raster to EPSG:3035 (ETRS89 / LAEA Europe)</span></span>
 <span><span class="va">pop_fr</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu">project</span><span class="op">(</span></span>
@@ -180,24 +213,28 @@ with a focus on <strong>areal-weighted interpolation</strong> as a drop-in alter
 <span>  method <span class="op">=</span> <span class="st">"bilinear"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span></span>
 <span><span class="co"># vectorize the raster</span></span>
+<span><span class="co"># yes, let's imagine there is no terra::extract() or exactextractr::exact_extract()</span></span>
+<span><span class="co"># and you are bound to the vector world</span></span>
 <span><span class="va">pop_fr_vec</span> <span class="op">&lt;-</span> <span class="fu">as.polygons</span><span class="op">(</span><span class="va">pop_fr</span>, aggregate <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>cell_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu">row_number</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># generate a hexagonal grid over mainland France</span></span>
 <span><span class="va">bbox_fr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_bbox.html" class="external-link">st_bbox</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">fr2_mainland</span>, <span class="fl">3035</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">cellsize_hex</span> <span class="op">&lt;-</span> <span class="fl">2500</span> <span class="co"># 2.5 km hexagons, also try pushing it down to 1000 m</span></span>
+<span></span>
+<span><span class="va">cellsize_hex</span> <span class="op">&lt;-</span> <span class="fl">2500</span> <span class="co"># 2.5 km hexagons</span></span>
+<span><span class="co"># also try pushing it down to 1km hexes to push the limits of your computer</span></span>
+<span></span>
 <span><span class="va">hex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">st_make_grid</a></span><span class="op">(</span><span class="va">bbox_fr</span>, cellsize <span class="op">=</span> <span class="va">cellsize_hex</span>, square <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_set_geometry</a></span><span class="op">(</span><span class="st">"geometry"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span>hex_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="fu">row_number</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">hex</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">hex</span><span class="op">)</span>, <span class="st">"Mb"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">hex</span><span class="op">)</span> <span class="co"># 171k, would be just over 1 million for 1km hexes</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">hex</span><span class="op">)</span>, <span class="st">"Mb"</span><span class="op">)</span> <span class="co"># ~200 mb, would be 1,200 mb for 1km hexes</span></span>
 <span></span>
 <span></span>
-<span><span class="va">aw_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://slu-openGIS.github.io/areal/reference/ar_validate.html" class="external-link">ar_validate</a></span><span class="op">(</span></span>
+<span><span class="va">aw_test</span> <span class="op">&lt;-</span> <span class="fu">areal</span><span class="fu">::</span><span class="fu"><a href="https://slu-openGIS.github.io/areal/reference/ar_validate.html" class="external-link">ar_validate</a></span><span class="op">(</span></span>
 <span>  source <span class="op">=</span> <span class="va">pop_fr_vec</span>,</span>
 <span>  target <span class="op">=</span> <span class="va">hex</span>,</span>
 <span>  varList <span class="op">=</span> <span class="st">"population_density"</span>,</span>
@@ -209,12 +246,12 @@ with a focus on <strong>areal-weighted interpolation</strong> as a drop-in alter
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">tictoc</span><span class="fu">::</span><span class="fu">tic</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">fr_areal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://slu-openGIS.github.io/areal/reference/aw_interpolate.html" class="external-link">aw_interpolate</a></span><span class="op">(</span></span>
+<span><span class="va">hex_areal</span> <span class="op">&lt;-</span> <span class="fu">areal</span><span class="fu">::</span><span class="fu"><a href="https://slu-openGIS.github.io/areal/reference/aw_interpolate.html" class="external-link">aw_interpolate</a></span><span class="op">(</span></span>
 <span>  .data <span class="op">=</span> <span class="va">hex</span>,</span>
 <span>  tid <span class="op">=</span> <span class="va">hex_id</span>,</span>
 <span>  source <span class="op">=</span> <span class="va">pop_fr_vec</span>,</span>
 <span>  sid <span class="op">=</span> <span class="va">cell_id</span>,</span>
-<span>  weight <span class="op">=</span> <span class="st">"sum"</span>,</span>
+<span>  weight <span class="op">=</span> <span class="st">"total"</span>,</span>
 <span>  output <span class="op">=</span> <span class="st">"tibble"</span>,</span>
 <span>  extensive <span class="op">=</span> <span class="st">"population_density"</span></span>
 <span><span class="op">)</span></span>
@@ -224,17 +261,14 @@ with a focus on <strong>areal-weighted interpolation</strong> as a drop-in alter
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">tictoc</span><span class="fu">::</span><span class="fu">tic</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">hex_dst</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dst_interpolate_aw.html">dst_interpolate_aw</a></span><span class="op">(</span></span>
+<span><span class="va">hex_ducksf</span> <span class="op">&lt;-</span> <span class="fu">ducksf</span><span class="fu">::</span><span class="fu"><a href="reference/dst_interpolate_aw.html">dst_interpolate_aw</a></span><span class="op">(</span></span>
 <span>  target_sf <span class="op">=</span> <span class="va">hex</span>,</span>
 <span>  tid <span class="op">=</span> <span class="st">"hex_id"</span>,</span>
 <span>  source_sf <span class="op">=</span> <span class="va">pop_fr_vec</span>,</span>
 <span>  sid <span class="op">=</span> <span class="st">"cell_id"</span>,</span>
 <span>  weight <span class="op">=</span> <span class="st">"total"</span>,</span>
 <span>  output <span class="op">=</span> <span class="st">"tibble"</span>,</span>
-<span>  extensive <span class="op">=</span> <span class="st">"population_density"</span>,</span>
-<span>  target_crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">hex</span><span class="op">)</span>,</span>
-<span>  source_crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">pop_fr_vec</span><span class="op">)</span>,</span>
-<span>  join_crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">hex</span><span class="op">)</span></span>
+<span>  extensive <span class="op">=</span> <span class="st">"population_density"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu">tictoc</span><span class="fu">::</span><span class="fu">toc</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -242,38 +276,28 @@ with a focus on <strong>areal-weighted interpolation</strong> as a drop-in alter
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">tictoc</span><span class="fu">::</span><span class="fu">tic</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">bm</span> <span class="op">&lt;-</span> <span class="fu">bench</span><span class="fu">::</span><span class="fu">mark</span><span class="op">(</span></span>
-<span>  sf_areal_aw <span class="op">=</span> <span class="fu"><a href="https://slu-openGIS.github.io/areal/reference/aw_interpolate.html" class="external-link">aw_interpolate</a></span><span class="op">(</span></span>
-<span>    .data <span class="op">=</span> <span class="va">hex</span>,</span>
-<span>    tid <span class="op">=</span> <span class="va">hex_id</span>,</span>
-<span>    source <span class="op">=</span> <span class="va">pop_fr_vec</span>,</span>
-<span>    sid <span class="op">=</span> <span class="va">cell_id</span>,</span>
-<span>    weight <span class="op">=</span> <span class="st">"sum"</span>,</span>
-<span>    output <span class="op">=</span> <span class="st">"tibble"</span>,</span>
-<span>    extensive <span class="op">=</span> <span class="st">"population_density"</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  ducksf_aw_v3 <span class="op">=</span> <span class="fu"><a href="reference/dst_interpolate_aw.html">dst_interpolate_aw</a></span><span class="op">(</span></span>
-<span>    target_sf <span class="op">=</span> <span class="va">hex</span>,</span>
-<span>    tid <span class="op">=</span> <span class="st">"hex_id"</span>,</span>
-<span>    source_sf <span class="op">=</span> <span class="va">pop_fr_vec</span>,</span>
-<span>    sid <span class="op">=</span> <span class="st">"cell_id"</span>,</span>
-<span>    weight <span class="op">=</span> <span class="st">"total"</span>,</span>
-<span>    output <span class="op">=</span> <span class="st">"tibble"</span>,</span>
-<span>    extensive <span class="op">=</span> <span class="st">"population_density"</span>,</span>
-<span>    target_crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">hex</span><span class="op">)</span>,</span>
-<span>    source_crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">pop_fr_vec</span><span class="op">)</span>,</span>
-<span>    join_crs <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">hex</span><span class="op">)</span>,</span>
-<span>    duckdb_threads <span class="op">=</span> <span class="cn">NULL</span></span>
-<span>  <span class="op">)</span>,</span>
-<span>  check <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  iterations <span class="op">=</span> <span class="fl">5</span></span>
+<span><span class="va">hex_geos</span> <span class="op">&lt;-</span> <span class="fu">geosareal</span><span class="fu">::</span><span class="fu">geos_interpolate_aw</span><span class="op">(</span></span>
+<span>  .data <span class="op">=</span> <span class="va">hex</span>,</span>
+<span>  tid <span class="op">=</span> <span class="va">hex_id</span>,</span>
+<span>  source <span class="op">=</span> <span class="va">pop_fr_vec</span>,</span>
+<span>  sid <span class="op">=</span> <span class="va">cell_id</span>,</span>
+<span>  weight <span class="op">=</span> <span class="st">"total"</span>,</span>
+<span>  output <span class="op">=</span> <span class="st">"tibble"</span>,</span>
+<span>  extensive <span class="op">=</span> <span class="st">"population_density"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu">tictoc</span><span class="fu">::</span><span class="fu">toc</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">bm</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.time.html" class="external-link">Sys.time</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+  </main><aside class="col-md-3"><div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/e-kotov/ducksf/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/e-kotov/ducksf/issues" class="external-link">Report a bug</a></li>
+</ul>
 </div>
 
-  </main><aside class="col-md-3"><div class="license">
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
@@ -292,7 +316,8 @@ with a focus on <strong>areal-weighted interpolation</strong> as a drop-in alter
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Egor Kotov <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0001-6690-5345" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>
+<a href="https://www.ekotov.pro" class="external-link">Egor Kotov</a> <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0001-6690-5345" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 </ul>
 </div>
 
@@ -310,7 +335,7 @@ with a focus on <strong>areal-weighted interpolation</strong> as a drop-in alter
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Egor Kotov.</p>
+  <p>Developed by <a href="https://www.ekotov.pro" class="external-link">Egor Kotov</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
