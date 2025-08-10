@@ -1,15 +1,17 @@
 Package: ducksf
-Title: Some Alternatives to sf Functions And This is a Working Title
+Title: Spatial Ops Faster Than sf and geos
 Version: 0.0.0.9000
 Authors@R: 
     person("Egor", "Kotov", , "kotov.egor@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-6690-5345"))
 Description: This package provides some alternatives to sf functions,
-    which are implemented using duckdb and geoarrow. It is intended to be
-    used with duckdb and duckspatial. I have no idea where this project
-    will go, use at your own risk.
+    which are implemented using duckdb and geoarrow. So far the only
+    implemented function is areal interpolation working similar to the one
+    fiund in 'areal' package, but much faster. I have no idea where this
+    project will go, use at your own risk.
 License: MIT + file LICENSE
-URL: http://www.ekotov.pro/ducksf/
+URL: https://github.com/e-kotov/ducksf , http://www.ekotov.pro/ducksf/
+BugReports: https://github.com/e-kotov/ducksf/issues
 Imports: 
     arrow,
     DBI,
@@ -22,6 +24,7 @@ Imports:
     wk
 Suggests: 
     areal,
+    dbplyr,
     quarto,
     testthat (>= 3.0.0)
 VignetteBuilder: 

@@ -1,0 +1,40 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "type": "SoftwareSourceCode",
+      "author": {
+        "id": "https://orcid.org/0000-0001-6690-5345"
+      },
+      "codeRepository": "https://github.com/e-kotov/ducksf",
+      "copyrightHolder": {
+        "id": "https://orcid.org/0000-0001-6690-5345",
+        "type": "Person",
+        "email": "kotov.egor@gmail.com",
+        "familyName": "Kotov",
+        "givenName": "Egor"
+      },
+      "description": "This package provides some alternatives to sf functions, which are implemented using duckdb and geoarrow. So far the only implemented function is areal interpolation working similar to the one fiund in 'areal' package, but much faster. I have no idea where this project will go, use at your own risk.",
+      "license": "https://spdx.org/licenses/MIT",
+      "name": "ducksf: Spatial Ops Faster Than sf and geos",
+      "programmingLanguage": {
+        "type": "ComputerLanguage",
+        "name": "R",
+        "url": "https://r-project.org"
+      },
+      "runtimePlatform": "R version 4.5.1 (2025-06-13)",
+      "version": "0.0.0.9000"
+    },
+    {
+      "type": "SoftwareSourceCode",
+      "author": {
+        "id": "https://orcid.org/0000-0001-6690-5345",
+        "type": "Person",
+        "email": "kotov.egor@gmail.com",
+        "familyName": "Kotov",
+        "givenName": "Egor"
+      },
+      "name": "ducksf. Spatial Ops Faster Than sf and geos"
+    }
+  ]
+}

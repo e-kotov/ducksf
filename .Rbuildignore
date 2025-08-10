@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^README\.Rmd$
+^README\.qmd$
 ^cran-comments\.md$
 ^private$
 ^\.github$
@@ -9,3 +10,5 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^CITATION\.cff$
+^codemeta\.json$

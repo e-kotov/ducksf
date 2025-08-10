@@ -1,0 +1,276 @@
+# --------------------------------------------
+# CITATION file created with {cffr} R package
+# See also: https://docs.ropensci.org/cffr/
+# --------------------------------------------
+ 
+cff-version: 1.2.0
+message: 'To cite package "ducksf" in publications use:'
+type: software
+license: MIT
+title: 'ducksf: Spatial Ops Faster Than sf and geos'
+version: 0.0.0.9000
+abstract: This package provides some alternatives to sf functions, which are implemented
+  using duckdb and geoarrow. So far the only implemented function is areal interpolation
+  working similar to the one fiund in 'areal' package, but much faster. I have no
+  idea where this project will go, use at your own risk.
+authors:
+- family-names: Kotov
+  given-names: Egor
+  email: kotov.egor@gmail.com
+  orcid: https://orcid.org/0000-0001-6690-5345
+preferred-citation:
+  type: manual
+  title: ducksf. Spatial Ops Faster Than sf and geos
+  authors:
+  - family-names: Kotov
+    given-names: Egor
+    email: kotov.egor@gmail.com
+    orcid: https://orcid.org/0000-0001-6690-5345
+  year: '2024'
+  url: https://github.com/e-kotov/ducksf
+repository-code: https://github.com/e-kotov/ducksf
+url: http://www.ekotov.pro/ducksf/
+contact:
+- family-names: Kotov
+  given-names: Egor
+  email: kotov.egor@gmail.com
+  orcid: https://orcid.org/0000-0001-6690-5345
+references:
+- type: software
+  title: arrow
+  abstract: 'arrow: Integration to ''Apache'' ''Arrow'''
+  notes: Imports
+  url: https://github.com/apache/arrow/
+  repository: https://CRAN.R-project.org/package=arrow
+  authors:
+  - family-names: Richardson
+    given-names: Neal
+    email: neal.p.richardson@gmail.com
+  - family-names: Cook
+    given-names: Ian
+    email: ianmcook@gmail.com
+  - family-names: Crane
+    given-names: Nic
+    email: thisisnic@gmail.com
+  - family-names: Dunnington
+    given-names: Dewey
+    email: dewey@fishandwhistle.net
+    orcid: https://orcid.org/0000-0002-9415-4582
+  - family-names: François
+    given-names: Romain
+    orcid: https://orcid.org/0000-0002-2444-4226
+  - family-names: Keane
+    given-names: Jonathan
+    email: jkeane@gmail.com
+  - family-names: Moldovan-Grünfeld
+    given-names: Dragoș
+    email: dragos.mold@gmail.com
+  - family-names: Ooms
+    given-names: Jeroen
+    email: jeroen@berkeley.edu
+  - family-names: Wujciak-Jens
+    given-names: Jacob
+    email: jacob@wujciak.de
+  - name: Apache Arrow
+    email: dev@arrow.apache.org
+  year: '2025'
+  doi: 10.32614/CRAN.package.arrow
+- type: software
+  title: DBI
+  abstract: 'DBI: R Database Interface'
+  notes: Imports
+  url: https://dbi.r-dbi.org
+  repository: https://CRAN.R-project.org/package=DBI
+  authors:
+  - name: R Special Interest Group on Databases (R-SIG-DB)
+  - family-names: Wickham
+    given-names: Hadley
+  - family-names: Müller
+    given-names: Kirill
+    email: kirill@cynkra.com
+    orcid: https://orcid.org/0000-0002-1416-3412
+  year: '2025'
+  doi: 10.32614/CRAN.package.DBI
+- type: software
+  title: dplyr
+  abstract: 'dplyr: A Grammar of Data Manipulation'
+  notes: Imports
+  url: https://dplyr.tidyverse.org
+  repository: https://CRAN.R-project.org/package=dplyr
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+    orcid: https://orcid.org/0000-0003-4757-117X
+  - family-names: François
+    given-names: Romain
+    orcid: https://orcid.org/0000-0002-2444-4226
+  - family-names: Henry
+    given-names: Lionel
+  - family-names: Müller
+    given-names: Kirill
+    orcid: https://orcid.org/0000-0002-1416-3412
+  - family-names: Vaughan
+    given-names: Davis
+    email: davis@posit.co
+    orcid: https://orcid.org/0000-0003-4777-038X
+  year: '2025'
+  doi: 10.32614/CRAN.package.dplyr
+- type: software
+  title: duckdb
+  abstract: 'duckdb: DBI Package for the DuckDB Database Management System'
+  notes: Imports
+  url: https://r.duckdb.org/
+  repository: https://CRAN.R-project.org/package=duckdb
+  authors:
+  - family-names: Mühleisen
+    given-names: Hannes
+    email: hannes@cwi.nl
+    orcid: https://orcid.org/0000-0001-8552-0029
+  - family-names: Raasveldt
+    given-names: Mark
+    email: mark.raasveldt@cwi.nl
+    orcid: https://orcid.org/0000-0001-5005-6844
+  year: '2025'
+  doi: 10.32614/CRAN.package.duckdb
+- type: software
+  title: geoarrow
+  abstract: 'geoarrow: Extension Types for Spatial Data for Use with ''Arrow'''
+  notes: Imports
+  url: https://geoarrow.org/geoarrow-r/
+  repository: https://CRAN.R-project.org/package=geoarrow
+  authors:
+  - family-names: Dunnington
+    given-names: Dewey
+    email: dewey@dunnington.ca
+    orcid: https://orcid.org/0000-0002-9415-4582
+  year: '2025'
+  doi: 10.32614/CRAN.package.geoarrow
+- type: software
+  title: glue
+  abstract: 'glue: Interpreted String Literals'
+  notes: Imports
+  url: https://glue.tidyverse.org/
+  repository: https://CRAN.R-project.org/package=glue
+  authors:
+  - family-names: Hester
+    given-names: Jim
+    orcid: https://orcid.org/0000-0002-2739-7082
+  - family-names: Bryan
+    given-names: Jennifer
+    email: jenny@posit.co
+    orcid: https://orcid.org/0000-0002-6983-2759
+  year: '2025'
+  doi: 10.32614/CRAN.package.glue
+- type: software
+  title: rlang
+  abstract: 'rlang: Functions for Base Types and Core R and ''Tidyverse'' Features'
+  notes: Imports
+  url: https://rlang.r-lib.org
+  repository: https://CRAN.R-project.org/package=rlang
+  authors:
+  - family-names: Henry
+    given-names: Lionel
+    email: lionel@posit.co
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  year: '2025'
+  doi: 10.32614/CRAN.package.rlang
+- type: software
+  title: sf
+  abstract: 'sf: Simple Features for R'
+  notes: Imports
+  url: https://r-spatial.github.io/sf/
+  repository: https://CRAN.R-project.org/package=sf
+  authors:
+  - family-names: Pebesma
+    given-names: Edzer
+    email: edzer.pebesma@uni-muenster.de
+    orcid: https://orcid.org/0000-0001-8049-7069
+  year: '2025'
+  doi: 10.32614/CRAN.package.sf
+- type: software
+  title: wk
+  abstract: 'wk: Lightweight Well-Known Geometry Parsing'
+  notes: Imports
+  url: https://paleolimbot.github.io/wk/
+  repository: https://CRAN.R-project.org/package=wk
+  authors:
+  - family-names: Dunnington
+    given-names: Dewey
+    email: dewey@fishandwhistle.net
+    orcid: https://orcid.org/0000-0002-9415-4582
+  - family-names: Pebesma
+    given-names: Edzer
+    email: edzer.pebesma@uni-muenster.de
+    orcid: https://orcid.org/0000-0001-8049-7069
+  year: '2025'
+  doi: 10.32614/CRAN.package.wk
+- type: software
+  title: areal
+  abstract: 'areal: Areal Weighted Interpolation'
+  notes: Suggests
+  url: https://chris-prener.github.io/areal/
+  repository: https://CRAN.R-project.org/package=areal
+  authors:
+  - family-names: Prener
+    given-names: Christopher
+    email: chris.prener@gmail.com
+    orcid: https://orcid.org/0000-0002-4310-9888
+  - family-names: Revord
+    given-names: Charlie
+    email: charlie.revord@slu.edu
+  - family-names: Fox
+    given-names: Branson
+    email: branson.fox@slu.edu
+    orcid: https://orcid.org/0000-0002-4361-2811
+  year: '2025'
+  doi: 10.32614/CRAN.package.areal
+- type: software
+  title: dbplyr
+  abstract: 'dbplyr: A ''dplyr'' Back End for Databases'
+  notes: Suggests
+  url: https://dbplyr.tidyverse.org/
+  repository: https://CRAN.R-project.org/package=dbplyr
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  - family-names: Girlich
+    given-names: Maximilian
+  - family-names: Ruiz
+    given-names: Edgar
+  year: '2025'
+  doi: 10.32614/CRAN.package.dbplyr
+- type: software
+  title: quarto
+  abstract: 'quarto: R Interface to ''Quarto'' Markdown Publishing System'
+  notes: Suggests
+  url: https://quarto-dev.github.io/quarto-r/
+  repository: https://CRAN.R-project.org/package=quarto
+  authors:
+  - family-names: Allaire
+    given-names: JJ
+    email: jj@posit.co
+    orcid: https://orcid.org/0000-0003-0174-9868
+  - family-names: Dervieux
+    given-names: Christophe
+    email: cderv@posit.co
+    orcid: https://orcid.org/0000-0003-4474-2498
+  year: '2025'
+  doi: 10.32614/CRAN.package.quarto
+- type: software
+  title: testthat
+  abstract: 'testthat: Unit Testing for R'
+  notes: Suggests
+  url: https://testthat.r-lib.org
+  repository: https://CRAN.R-project.org/package=testthat
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  year: '2025'
+  doi: 10.32614/CRAN.package.testthat
+  version: '>= 3.0.0'
+

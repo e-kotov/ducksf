@@ -1,9 +1,8 @@
-# ducksf. Some Alternatives to sf Functions And This is a Working Title
 
 
 <!-- README.md is generated from README.qmd. Please edit that file -->
 
-# ducksf
+# ducksf: Spatial Ops Faster Than sf and geos <a href="https://www.ekotov.pro/ducksf/"><img src="man/figures/logo.png" align="right" height="134" alt="ducksf website" /></a>
 
 <!-- badges: start -->
 
@@ -16,19 +15,40 @@ status](https://www.r-pkg.org/badges/version/ducksf.png)](https://CRAN.R-project
 <!-- badges: end -->
 
 This package provides some alternatives to sf functions, which are
-implemented using duckdb and geoarrow. It is intended to be used with
-duckdb and duckspatial. I have no idea where this project will go, use
-at your own risk.
+implemented using duckdb and geoarrow. So far the only implemented
+function is areal interpolation working similar to the one fiund in
+‘areal’ package, but much faster. I have no idea where this project will
+go, use at your own risk.
 
 `ducksf` provides **fast, DuckDB Spatial–backed spatial data
 operations** for R,  
-with a focus on **areal-weighted interpolation** as a drop-in
+with a current focus on **areal-weighted interpolation** as a drop-in
 alternative to  
 `sf::st_interpolate_aw()` and `areal::aw_interpolate()`.
 
+Here are the speed boosts and memory savings you can expect:
+
+![](man/figures/vis-test-total.png)
+
+![](man/figures/vis-test-sum.png)
+
+As you can see from the figures, `ducksf` is much faster than than
+`areal::aw_interpolate()` (and `sf::st_interpolate_aw()`, as it works
+the same way, but is functionally more limited), especially for large
+datasets. It also uses less memory, which is crucial when working with
+large spatial datasets. Even though there is a cost of translating `sf`
+objects to DuckDB tables and back, the overall performance is
+significantly improved.
+
+The misterious `geosareal` package is just a proof-of-concept package
+that also implements areal interpolation, but using `geos` instead of
+`duckdb`. It is not meant to be used in production and is not
+maintained, but the code is available here:
+<https://github.com/e-kotov/r-geos-areal-weighted-interpolation-prototype>.
+
 ## Installation
 
-You can install the development version of ducksf from
+You can install the development version of `{ducksf}` from
 [GitHub](https://github.com/e-kotov/ducksf) with:
 
 ``` r
@@ -85,10 +105,22 @@ a_show <- a1_core[, "BIR74"]
 names(a_show)[1] <- "intensive"
 a_show$extensive <- st_drop_geometry(a2_core)$BIR74
 plot(a_show[c("intensive", "extensive")], key.pos = 4)
+```
 
+## Mask `{sf}` functions
+
+`{ducksf}` also provides a way to **mask `{sf}` functions** so that they
+dispatch to `{ducksf}` instead of `{sf}`. This is useful if you want to
+use `{sf}` functions with `{ducksf}` semantics without changing your
+code too much. By default it is of course disabled, so you can use
+`{sf}` functions as usual even if `{ducksf}` is loaded. The resulting
+numbers will be insignificantly different from `{sf}` results due to
+rounding errors, but they will be very close.
+
+``` r
 ## 2) Masked drop-in (sf semantics) -----------------------------------------
 
-# Enable masking so st_interpolate_aw() dispatches to ducksf
+# Enable/disable masking so st_interpolate_aw() dispatches to ducksf
 sf_use_ducksf(TRUE) # or: sf_use_ducksf(TRUE, allow = "st_interpolate_aw")
 sf_use_ducksf(FALSE) # or: sf_use_ducksf(TRUE, allow = "st_interpolate_aw")
 
@@ -107,30 +139,45 @@ plot(a1[c("intensive", "extensive")], key.pos = 4)
 sf_use_ducksf(FALSE)
 ```
 
-# To test speed on relatively large data
+## To test speed on relatively large data
 
 ``` r
+install.packages(setdiff(
+  c(
+    "duckdb",
+    "sf",
+    "areal",
+    "geoarrow",
+    "terra",
+    "geodata",
+    "giscoR",
+    "tidyverse",
+    "tictoc"
+  ),
+  rownames(installed.packages())
+))
+
+
 library(duckdb)
 library(sf)
 library(areal)
 library(geoarrow)
 library(terra)
 library(geodata)
+library(giscoR)
 library(areal)
 library(tidyverse)
-library(ducksf)
-library(bench)
+library(tictoc)
+library(ducksf) # remotes::install_github("e-kotov/ducksf")
+# also optional if you want to try it yourself, geosareal also does quite well compared to sf-based interpolation
+# library(geosareal) # remotes::install_github("e-kotov/r-geos-areal-weighted-interpolation-prototype")
 
-
-# download may take > 5s
+# get data
 dir.create("private/data", recursive = TRUE)
 pop <- geodata::population(year = 2020, res = 2.5, path = "private/data") # GPWv4 density
 nuts2 <- giscoR::gisco_get_nuts(year = "2021", nuts_level = 2, epsg = "4326")
-
 fr2 <- subset(nuts2, CNTR_CODE == "FR")
-
 fr2_mainland <- subset(fr2, !grepl("^FRY|^FRM", NUTS_ID))
-# plot(st_geometry(fr2_mainland), main = "France NUTS-2 regions (2021)")
 
 # crop pop raster to mainland France
 pop_fr <- terra::crop(
@@ -138,10 +185,8 @@ pop_fr <- terra::crop(
   st_bbox(fr2_mainland),
   snap = "out"
 )
-
 # mask
 pop_fr <- terra::mask(pop_fr, fr2_mainland)
-# plot(pop_fr, main = "GPWv4 Population Density in Mainland France (2020)")
 
 # project the raster to EPSG:3035 (ETRS89 / LAEA Europe)
 pop_fr <- terra::project(
@@ -150,24 +195,28 @@ pop_fr <- terra::project(
   method = "bilinear"
 )
 
-
 # vectorize the raster
+# yes, let's imagine there is no terra::extract() or exactextractr::exact_extract()
+# and you are bound to the vector world
 pop_fr_vec <- as.polygons(pop_fr, aggregate = FALSE) |>
   st_as_sf() |>
   mutate(cell_id = as.character(row_number()))
 
 # generate a hexagonal grid over mainland France
 bbox_fr <- st_bbox(st_transform(fr2_mainland, 3035))
-cellsize_hex <- 2500 # 2.5 km hexagons, also try pushing it down to 1000 m
+
+cellsize_hex <- 2500 # 2.5 km hexagons
+# also try pushing it down to 1km hexes to push the limits of your computer
+
 hex <- st_make_grid(bbox_fr, cellsize = cellsize_hex, square = FALSE) |>
   st_as_sf() |>
   st_set_geometry("geometry") |>
   mutate(hex_id = as.character(row_number()))
-nrow(hex)
-format(object.size(hex), "Mb")
+nrow(hex) # 171k, would be just over 1 million for 1km hexes
+format(object.size(hex), "Mb") # ~200 mb, would be 1,200 mb for 1km hexes
 
 
-aw_test <- ar_validate(
+aw_test <- areal::ar_validate(
   source = pop_fr_vec,
   target = hex,
   varList = "population_density",
@@ -179,12 +228,12 @@ aw_test
 
 Sys.time()
 tictoc::tic()
-fr_areal <- aw_interpolate(
+hex_areal <- areal::aw_interpolate(
   .data = hex,
   tid = hex_id,
   source = pop_fr_vec,
   sid = cell_id,
-  weight = "sum",
+  weight = "total",
   output = "tibble",
   extensive = "population_density"
 )
@@ -194,17 +243,14 @@ Sys.time()
 
 Sys.time()
 tictoc::tic()
-hex_dst <- dst_interpolate_aw(
+hex_ducksf <- ducksf::dst_interpolate_aw(
   target_sf = hex,
   tid = "hex_id",
   source_sf = pop_fr_vec,
   sid = "cell_id",
   weight = "total",
   output = "tibble",
-  extensive = "population_density",
-  target_crs = st_crs(hex),
-  source_crs = st_crs(pop_fr_vec),
-  join_crs = st_crs(hex)
+  extensive = "population_density"
 )
 tictoc::toc()
 Sys.time()
@@ -212,33 +258,15 @@ Sys.time()
 
 Sys.time()
 tictoc::tic()
-bm <- bench::mark(
-  sf_areal_aw = aw_interpolate(
-    .data = hex,
-    tid = hex_id,
-    source = pop_fr_vec,
-    sid = cell_id,
-    weight = "sum",
-    output = "tibble",
-    extensive = "population_density"
-  ),
-  ducksf_aw_v3 = dst_interpolate_aw(
-    target_sf = hex,
-    tid = "hex_id",
-    source_sf = pop_fr_vec,
-    sid = "cell_id",
-    weight = "total",
-    output = "tibble",
-    extensive = "population_density",
-    target_crs = st_crs(hex),
-    source_crs = st_crs(pop_fr_vec),
-    join_crs = st_crs(hex),
-    duckdb_threads = NULL
-  ),
-  check = FALSE,
-  iterations = 5
+hex_geos <- geosareal::geos_interpolate_aw(
+  .data = hex,
+  tid = hex_id,
+  source = pop_fr_vec,
+  sid = cell_id,
+  weight = "total",
+  output = "tibble",
+  extensive = "population_density"
 )
 tictoc::toc()
 Sys.time()
-bm
 ```
