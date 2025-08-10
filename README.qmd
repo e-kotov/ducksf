@@ -113,3 +113,138 @@ plot(a1[c("intensive", "extensive")], key.pos = 4)
 # Disable masking when done
 sf_use_ducksf(FALSE)
 ```
+
+
+# To test speed on relatively large data
+
+```{r}
+library(duckdb)
+library(sf)
+library(areal)
+library(geoarrow)
+library(terra)
+library(geodata)
+library(areal)
+library(tidyverse)
+library(ducksf)
+
+
+# download may take > 5s
+pop <- geodata::population(year = 2020, res = 2.5, path = "private/data") # GPWv4 density
+nuts2 <- giscoR::gisco_get_nuts(year = "2021", nuts_level = 2, epsg = "4326")
+
+fr2 <- subset(nuts2, CNTR_CODE == "FR")
+
+fr2_mainland <- subset(fr2, !grepl("^FRY|^FRM", NUTS_ID))
+# plot(st_geometry(fr2_mainland), main = "France NUTS-2 regions (2021)")
+
+# crop pop raster to mainland France
+pop_fr <- terra::crop(
+  pop,
+  st_bbox(fr2_mainland),
+  snap = "out"
+)
+
+# mask
+pop_fr <- terra::mask(pop_fr, fr2_mainland)
+# plot(pop_fr, main = "GPWv4 Population Density in Mainland France (2020)")
+
+# project the raster to EPSG:3035 (ETRS89 / LAEA Europe)
+pop_fr <- terra::project(
+  pop_fr,
+  "EPSG:3035",
+  method = "bilinear"
+)
+
+
+# vectorize the raster
+pop_fr_vec <- as.polygons(pop_fr, aggregate = FALSE) |>
+  st_as_sf() |>
+  mutate(cell_id = as.character(row_number()))
+
+# generate a hexagonal grid over mainland France
+bbox_fr <- st_bbox(st_transform(fr2_mainland, 3035))
+cellsize_hex <- 2500 # 2.5 km hexagons, also try pushing it down to 1000 m
+hex <- st_make_grid(bbox_fr, cellsize = cellsize_hex, square = FALSE) |>
+  st_as_sf() |>
+  st_set_geometry("geometry") |>
+  mutate(hex_id = as.character(row_number()))
+nrow(hex)
+format(object.size(hex), "Mb")
+
+
+aw_test <- ar_validate(
+  source = pop_fr_vec,
+  target = hex,
+  varList = "population_density",
+  method = "aw",
+  verbose = TRUE
+)
+aw_test
+
+
+Sys.time()
+tictoc::tic()
+fr_areal <- aw_interpolate(
+  .data = hex,
+  tid = hex_id,
+  source = pop_fr_vec,
+  sid = cell_id,
+  weight = "sum",
+  output = "tibble",
+  extensive = "population_density"
+)
+tictoc::toc()
+Sys.time()
+
+
+Sys.time()
+tictoc::tic()
+hex_dst <- dst_interpolate_aw(
+  target_sf = hex,
+  tid = "hex_id",
+  source_sf = pop_fr_vec,
+  sid = "cell_id",
+  weight = "total",
+  output = "tibble",
+  extensive = "population_density",
+  target_crs = st_crs(hex),
+  source_crs = st_crs(pop_fr_vec),
+  join_crs = st_crs(hex)
+)
+tictoc::toc()
+Sys.time()
+
+
+Sys.time()
+tictoc::tic()
+bm <- bench::mark(
+  sf_areal_aw = aw_interpolate(
+    .data = hex,
+    tid = hex_id,
+    source = pop_fr_vec,
+    sid = cell_id,
+    weight = "sum",
+    output = "tibble",
+    extensive = "population_density"
+  ),
+  ducksf_aw_v3 = dst_interpolate_aw(
+    target_sf = hex,
+    tid = "hex_id",
+    source_sf = pop_fr_vec,
+    sid = "cell_id",
+    weight = "total",
+    output = "tibble",
+    extensive = "population_density",
+    target_crs = st_crs(hex),
+    source_crs = st_crs(pop_fr_vec),
+    join_crs = st_crs(hex),
+    duckdb_threads = NULL
+  ),
+  check = FALSE,
+  iterations = 5
+)
+tictoc::toc()
+Sys.time()
+bm
+```
