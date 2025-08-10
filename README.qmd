@@ -130,6 +130,7 @@ library(ducksf)
 
 
 # download may take > 5s
+dir.create("private/data", recursive = TRUE)
 pop <- geodata::population(year = 2020, res = 2.5, path = "private/data") # GPWv4 density
 nuts2 <- giscoR::gisco_get_nuts(year = "2021", nuts_level = 2, epsg = "4326")
 
