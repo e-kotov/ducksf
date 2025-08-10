@@ -1,42 +1,33 @@
----
-title: "ducksf. Some Alternatives to sf Functions And This is a Working Title"
-format: gfm
-editor: source
-execute: 
-  eval: false
----
+# ducksf. Some Alternatives to sf Functions And This is a Working Title
+
 
 <!-- README.md is generated from README.qmd. Please edit that file -->
-
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
-)
-
-is_html <- knitr::is_html_output()
-```
 
 # ducksf
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![CRAN status](https://www.r-pkg.org/badges/version/ducksf)](https://CRAN.R-project.org/package=ducksf)
+
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/ducksf.png)](https://CRAN.R-project.org/package=ducksf)
 <!-- badges: end -->
 
-This package provides some alternatives to sf functions, which are implemented using duckdb and geoarrow. It is intended to be used with duckdb and duckspatial. I have no idea where this project will go, use at your own risk.
+This package provides some alternatives to sf functions, which are
+implemented using duckdb and geoarrow. It is intended to be used with
+duckdb and duckspatial. I have no idea where this project will go, use
+at your own risk.
 
-`ducksf` provides **fast, DuckDB Spatial–backed spatial data operations** for R,  
-with a focus on **areal-weighted interpolation** as a drop-in alternative to  
+`ducksf` provides **fast, DuckDB Spatial–backed spatial data
+operations** for R,  
+with a focus on **areal-weighted interpolation** as a drop-in
+alternative to  
 `sf::st_interpolate_aw()` and `areal::aw_interpolate()`.
-
 
 ## Installation
 
-You can install the development version of ducksf from [GitHub](https://github.com/e-kotov/ducksf) with:
+You can install the development version of ducksf from
+[GitHub](https://github.com/e-kotov/ducksf) with:
 
 ``` r
 # install.packages("pak")
@@ -47,7 +38,7 @@ pak::pak("e-kotov/ducksf")
 
 This is a basic example which shows you how to solve a common problem:
 
-```{r example}
+``` r
 ## Quick example (using the default `sf` dataset)
 library(sf)
 library(ducksf)
