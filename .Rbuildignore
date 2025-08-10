@@ -4,3 +4,8 @@
 ^README\.Rmd$
 ^cran-comments\.md$
 ^private$
+^\.github$
+^codecov\.yml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

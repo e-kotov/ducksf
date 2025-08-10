@@ -9,6 +9,7 @@ Description: This package provides some alternatives to sf functions,
     used with duckdb and duckspatial. I have no idea where this project
     will go, use at your own risk.
 License: MIT + file LICENSE
+URL: http://www.ekotov.pro/ducksf/
 Imports: 
     arrow,
     DBI,
@@ -16,9 +17,9 @@ Imports:
     duckdb,
     geoarrow,
     glue,
+    rlang,
     sf,
-    wk,
-    rlang
+    wk
 Suggests: 
     areal,
     quarto,

@@ -11,6 +11,8 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/ducksf.png)](https://CRAN.R-project.org/package=ducksf)
+[![R-CMD-check](https://github.com/e-kotov/ducksf/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/e-kotov/ducksf/actions/workflows/R-CMD-check.yaml)
+<!-- [![Codecov test coverage](https://codecov.io/gh/e-kotov/ducksf/graph/badge.svg)](https://app.codecov.io/gh/e-kotov/ducksf) -->
 <!-- badges: end -->
 
 This package provides some alternatives to sf functions, which are
