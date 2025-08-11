@@ -16,7 +16,7 @@ status](https://www.r-pkg.org/badges/version/ducksf.png)](https://CRAN.R-project
 
 This package provides some alternatives to sf functions, which are
 implemented using duckdb and geoarrow. So far the only implemented
-function is areal interpolation working similar to the one fiund in
+function is areal interpolation working similar to the one found in
 ‘areal’ package, but much faster. I have no idea where this project will
 go, use at your own risk.
 

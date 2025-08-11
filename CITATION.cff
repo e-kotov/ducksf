@@ -11,7 +11,7 @@ title: 'ducksf: Spatial Ops Faster Than sf and geos'
 version: 0.0.0.9000
 abstract: This package provides some alternatives to sf functions, which are implemented
   using duckdb and geoarrow. So far the only implemented function is areal interpolation
-  working similar to the one fiund in 'areal' package, but much faster. I have no
+  working similar to the one found in 'areal' package, but much faster. I have no
   idea where this project will go, use at your own risk.
 authors:
 - family-names: Kotov

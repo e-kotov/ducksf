@@ -2,7 +2,7 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "ducksf",
-  "description": "This package provides some alternatives to sf functions, which are implemented using duckdb and geoarrow. So far the only implemented function is areal interpolation working similar to the one fiund in 'areal' package, but much faster. I have no idea where this project will go, use at your own risk.",
+  "description": "This package provides some alternatives to sf functions, which are implemented using duckdb and geoarrow. So far the only implemented function is areal interpolation working similar to the one found in 'areal' package, but much faster. I have no idea where this project will go, use at your own risk.",
   "name": "ducksf: Spatial Ops Faster Than sf and geos",
   "relatedLink": "http://www.ekotov.pro/ducksf/",
   "codeRepository": "https://github.com/e-kotov/ducksf",
@@ -204,7 +204,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "482.025KB",
+  "fileSize": "487.767KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",

@@ -28,7 +28,7 @@ is_html <- knitr::is_html_output()
 <!-- [![Codecov test coverage](https://codecov.io/gh/e-kotov/ducksf/graph/badge.svg)](https://app.codecov.io/gh/e-kotov/ducksf) -->
 <!-- badges: end -->
 
-This package provides some alternatives to sf functions, which are implemented using duckdb and geoarrow. So far the only implemented function is areal interpolation working similar to the one fiund in 'areal' package, but much faster. I have no idea where this project will go, use at your own risk.
+This package provides some alternatives to sf functions, which are implemented using duckdb and geoarrow. So far the only implemented function is areal interpolation working similar to the one found in 'areal' package, but much faster. I have no idea where this project will go, use at your own risk.
 
 `ducksf` provides **fast, DuckDB Spatial–backed spatial data operations** for R,  
 with a current focus on **areal-weighted interpolation** as a drop-in alternative to  
