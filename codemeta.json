@@ -96,6 +96,12 @@
   "softwareRequirements": {
     "1": {
       "@type": "SoftwareApplication",
+      "identifier": "R",
+      "name": "R",
+      "version": ">= 4.1"
+    },
+    "2": {
+      "@type": "SoftwareApplication",
       "identifier": "arrow",
       "name": "arrow",
       "provider": {
@@ -106,7 +112,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=arrow"
     },
-    "2": {
+    "3": {
       "@type": "SoftwareApplication",
       "identifier": "DBI",
       "name": "DBI",
@@ -118,7 +124,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=DBI"
     },
-    "3": {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "dplyr",
       "name": "dplyr",
@@ -130,7 +136,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=dplyr"
     },
-    "4": {
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "duckdb",
       "name": "duckdb",
@@ -142,7 +148,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=duckdb"
     },
-    "5": {
+    "6": {
       "@type": "SoftwareApplication",
       "identifier": "geoarrow",
       "name": "geoarrow",
@@ -154,7 +160,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=geoarrow"
     },
-    "6": {
+    "7": {
       "@type": "SoftwareApplication",
       "identifier": "glue",
       "name": "glue",
@@ -166,7 +172,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=glue"
     },
-    "7": {
+    "8": {
       "@type": "SoftwareApplication",
       "identifier": "rlang",
       "name": "rlang",
@@ -178,7 +184,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=rlang"
     },
-    "8": {
+    "9": {
       "@type": "SoftwareApplication",
       "identifier": "sf",
       "name": "sf",
@@ -190,7 +196,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=sf"
     },
-    "9": {
+    "10": {
       "@type": "SoftwareApplication",
       "identifier": "wk",
       "name": "wk",
@@ -204,7 +210,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "487.767KB",
+  "fileSize": "487.792KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",

@@ -12,6 +12,8 @@ Description: This package provides some alternatives to sf functions,
 License: MIT + file LICENSE
 URL: https://github.com/e-kotov/ducksf , http://www.ekotov.pro/ducksf/
 BugReports: https://github.com/e-kotov/ducksf/issues
+Depends: 
+    R (>= 4.1)
 Imports: 
     arrow,
     DBI,
