@@ -65,10 +65,10 @@
 </div>
 <!-- badges: start -->
 
-<p>This package provides some alternatives to sf functions, which are implemented using duckdb and geoarrow. So far the only implemented function is areal interpolation working similar to the one found in ‘areal’ package, but much faster. I have no idea where this project will go, use at your own risk.</p>
+<p>This package provides some alternatives to sf functions, which are implemented using duckdb and geoarrow. So far the only implemented function is areal interpolation working similar to the one fiund in ‘areal’ package, but much faster. I have no idea where this project will go, use at your own risk.</p>
 <p><code>ducksf</code> provides <strong>fast, DuckDB Spatial–backed spatial data operations</strong> for R,<br>
 with a current focus on <strong>areal-weighted interpolation</strong> as a drop-in alternative to<br><code><a href="https://r-spatial.github.io/sf/reference/interpolate_aw.html" class="external-link">sf::st_interpolate_aw()</a></code> and <code><a href="https://slu-openGIS.github.io/areal/reference/aw_interpolate.html" class="external-link">areal::aw_interpolate()</a></code>.</p>
-<p>Here are the speed boosts and memory savings you can expect:</p>
+<p>Here’s what you can expect for speed gains and memory savings (measured on projected planar data):</p>
 <p><img src="reference/figures/vis-test-total.png"></p>
 <p><img src="reference/figures/vis-test-sum.png"></p>
 <p>As you can see from the figures, <code>ducksf</code> is much faster than than <code><a href="https://slu-openGIS.github.io/areal/reference/aw_interpolate.html" class="external-link">areal::aw_interpolate()</a></code> (and <code><a href="https://r-spatial.github.io/sf/reference/interpolate_aw.html" class="external-link">sf::st_interpolate_aw()</a></code>, as it works the same way, but is functionally more limited), especially for large datasets. It also uses less memory, which is crucial when working with large spatial datasets. Even though there is a cost of translating <code>sf</code> objects to DuckDB tables and back, the overall performance is significantly improved.</p>
@@ -84,7 +84,7 @@ with a current focus on <strong>areal-weighted interpolation</strong> as a drop-
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
+<p>This is a basic example which shows you how to solve a common problem (following the <a href="https://r-spatial.github.io/sf/reference/interpolate_aw.html" class="external-link"><code>sf</code> package’s example</a> - our result will be a little different, as we project the data to NAD83 / Conus Albers (EPSG:5070)):</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Quick example (using the default `sf` dataset)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
@@ -92,6 +92,8 @@ with a current focus on <strong>areal-weighted interpolation</strong> as a drop-
 <span></span>
 <span><span class="co"># data &amp; grid (from sf help)</span></span>
 <span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_read.html" class="external-link">st_read</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shape/nc.shp"</span>, package <span class="op">=</span> <span class="st">"sf"</span><span class="op">)</span>, quiet <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co"># transform to NAD83 / Conus Albers (EPSG:5070)</span></span>
+<span><span class="va">nc</span> <span class="op">&lt;-</span> <span class="va">nc</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="fl">5070</span><span class="op">)</span></span>
 <span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_make_grid.html" class="external-link">st_make_grid</a></span><span class="op">(</span><span class="va">nc</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span> <span class="co"># 'to' can be sfc for sf, but ducksf core needs an sf with an ID</span></span>
 <span></span>
 <span><span class="co"># Prepare IDs for ducksf core</span></span>
@@ -130,6 +132,7 @@ with a current focus on <strong>areal-weighted interpolation</strong> as a drop-
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">a_show</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"intensive"</span></span>
 <span><span class="va">a_show</span><span class="op">$</span><span class="va">extensive</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="va">a2_core</span><span class="op">)</span><span class="op">$</span><span class="va">BIR74</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">a_show</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"intensive"</span>, <span class="st">"extensive"</span><span class="op">)</span><span class="op">]</span>, key.pos <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/example-plot.png"></p>
 </div>
 <div class="section level2">
 <h2 id="mask-sf-functions">Mask <code>{sf}</code> functions<a class="anchor" aria-label="anchor" href="#mask-sf-functions"></a>
@@ -159,6 +162,7 @@ with a current focus on <strong>areal-weighted interpolation</strong> as a drop-
 <div class="section level2">
 <h2 id="to-test-speed-on-relatively-large-data">To test speed on relatively large data<a class="anchor" aria-label="anchor" href="#to-test-speed-on-relatively-large-data"></a>
 </h2>
+<p><em>This data and code were used for the tests presented at the top of this README, but with <code>bench::mark()</code> function</em></p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">setdiff</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
