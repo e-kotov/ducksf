@@ -26,7 +26,8 @@ with a current focus on **areal-weighted interpolation** as a drop-in
 alternative to  
 `sf::st_interpolate_aw()` and `areal::aw_interpolate()`.
 
-Here are the speed boosts and memory savings you can expect:
+Here’s what you can expect for speed gains and memory savings (measured
+on projected planar data):
 
 ![](man/figures/vis-test-total.png)
 
@@ -58,7 +59,11 @@ pak::pak("e-kotov/ducksf")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to solve a common problem
+(following the [`sf` package’s
+example](https://r-spatial.github.io/sf/reference/interpolate_aw.html) -
+our result will be a little different, as we project the data to NAD83 /
+Conus Albers (EPSG:5070)):
 
 ``` r
 ## Quick example (using the default `sf` dataset)
@@ -67,6 +72,8 @@ library(ducksf)
 
 # data & grid (from sf help)
 nc <- st_read(system.file("shape/nc.shp", package = "sf"), quiet = TRUE)
+# transform to NAD83 / Conus Albers (EPSG:5070)
+nc <- nc |> st_transform(5070)
 g <- st_make_grid(nc, n = c(10, 5)) # 'to' can be sfc for sf, but ducksf core needs an sf with an ID
 
 # Prepare IDs for ducksf core
@@ -107,6 +114,8 @@ a_show$extensive <- st_drop_geometry(a2_core)$BIR74
 plot(a_show[c("intensive", "extensive")], key.pos = 4)
 ```
 
+![](man/figures/example-plot.png)
+
 ## Mask `{sf}` functions
 
 `{ducksf}` also provides a way to **mask `{sf}` functions** so that they
@@ -140,6 +149,9 @@ sf_use_ducksf(FALSE)
 ```
 
 ## To test speed on relatively large data
+
+*This data and code were used for the tests presented at the top of this
+README, but with `bench::mark()` function*
 
 ``` r
 install.packages(setdiff(
