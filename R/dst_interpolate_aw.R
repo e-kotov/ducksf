@@ -110,66 +110,38 @@ dst_interpolate_aw <- function(
   }
 
   # ---- ids: accept bare names or strings, then canonicalize ----
+  # ---- ids: accept bare names or strings, then canonicalize ----
   sidQN <- .ducksf_normalize_cols(rlang::enexpr(sid), "sid")
   tidQN <- .ducksf_normalize_cols(rlang::enexpr(tid), "tid")
 
-  if (!sidQN %in% names(source_sf)) {
-    stop(glue::glue(
-      "Column '{sidQN}' (sid) not found in source_sf. Available: {paste(names(source_sf), collapse = ', ')}"
-    ))
-  }
+  # required columns present?
+  ducksf_check_cols_present(source_sf, sidQN, "source_sf")
+  ducksf_check_cols_present(target_sf, tidQN, "target_sf")
 
-  if (!tidQN %in% names(target_sf)) {
-    stop(glue::glue(
-      "Column '{tidQN}' (tid) not found in target_sf. Available: {paste(names(target_sf), collapse = ', ')}"
-    ))
-  }
+  # handle tid/sid name conflict on target (renames target tid -> ...tid if needed)
+  cf <- ducksf_handle_id_conflict(target_sf, tidQN, sidQN)
+  target_sf <- cf$target_sf
+  tidQN <- cf$tidQN
+  nameConflict <- cf$nameConflict
+  tidOrig <- cf$tidOrig
 
-  # Symbols only when needed for dplyr calls:
-  sid_sym <- rlang::sym(sidQN)
-  tid_sym <- rlang::sym(tidQN)
-
-  # conflict (unchanged)
-  nameConflict <- FALSE
-  tidOrig <- tidQN
-  if (identical(tidQN, sidQN)) {
-    target_sf <- dplyr::rename(target_sf, ...tid = !!tid_sym)
-    tidQN <- "...tid"
-    tid_sym <- rlang::sym(tidQN)
-    nameConflict <- TRUE
-  }
-
-  # variables (unchanged)
-  if (missing(intensive) && !missing(extensive)) {
-    type <- "extensive"
-    ex_vars <- extensive
-    in_vars <- character(0)
-  } else if (!missing(intensive) && missing(extensive)) {
-    if (weight == "total") {
-      stop("Intensive requires weight='sum'.")
-    }
-    type <- "intensive"
-    ex_vars <- character(0)
-    in_vars <- intensive
-  } else {
-    type <- "mixed"
-    ex_vars <- extensive
-    in_vars <- intensive
-  }
+  # plan variables: figure extensive/intensive/mixed, enforce numeric, apply na.rm
+  pv <- ducksf_interpolate_aw_plan_vars(
+    source_sf,
+    extensive,
+    intensive,
+    na.rm = na.rm
+  )
+  type <- pv$type
+  ex_vars <- pv$ex_vars
+  in_vars <- pv$in_vars
+  vars_used <- pv$vars_used
+  source_sf <- pv$source_sf
   vars <- c(ex_vars, in_vars)
-  vars_used <- unique(c(ex_vars, in_vars))
-  if (isTRUE(na.rm) && length(vars_used)) {
-    # ensure numeric
-    bad <- vars_used[!vapply(source_sf[vars_used], is.numeric, TRUE)]
-    if (length(bad)) {
-      stop(
-        "Non-numeric variable(s) in 'source_sf': ",
-        paste(bad, collapse = ", "),
-        ". Only numeric columns can be interpolated."
-      )
-    }
-    keep_rows <- rowSums(is.na(source_sf[vars_used])) == 0L
-    source_sf <- source_sf[keep_rows, , drop = FALSE]
+
+  # sf-style constraint: intensive-only cannot use weight = "total"
+  if (identical(type, "intensive") && identical(weight, "total")) {
+    stop("Intensive requires weight='sum'.")
   }
   # column presence (unchanged)
   if (!sidQN %in% names(source_sf)) {
@@ -200,27 +172,8 @@ dst_interpolate_aw <- function(
   same_trg_join <- .ducksf_crs_equal(target_crs, join_crs)
 
   # ---- DuckDB ----
-  con <- DBI::dbConnect(duckdb::duckdb(":memory:"))
-  on.exit(
-    {
-      if (DBI::dbIsValid(con)) DBI::dbDisconnect(con, shutdown = TRUE)
-    },
-    add = TRUE
-  )
-  DBI::dbExecute(con, "INSTALL spatial; LOAD spatial;")
-  DBI::dbExecute(con, "CALL register_geoarrow_extensions();")
-  if (!is.null(duckdb_threads)) {
-    try(
-      DBI::dbExecute(
-        con,
-        glue::glue(
-          "SET threads={duckdb_threads};"
-        )
-      ),
-      silent = TRUE
-    )
-  }
-  # DBI::dbGetQuery(con, "SELECT current_setting('threads');") # check if set
+  con <- ducksf_duck_connect(threads = duckdb_threads)
+  on.exit(ducksf_duck_disconnect(con), add = TRUE)
 
   # ---- register data with duckdb, zero-copy ----
   .ducksf_register_sf(con, source_sf, "source_tbl_raw", overwrite = TRUE)
@@ -232,205 +185,104 @@ dst_interpolate_aw <- function(
 
   # Normalize ids + (optional) single-pass transform to join_crs
   # SOURCE -> source_tbl (id + geom + needed vars)
-  DBI::dbExecute(
-    con,
-    glue::glue(
-      "
-      CREATE OR REPLACE VIEW source_tbl AS
-      SELECT
-        {DBI::dbQuoteIdentifier(con, sidQN)} AS sid,
-        {DBI::dbQuoteIdentifier(con, src_geom_name)} AS geom
-        {if (length(vars)) paste0(', ', paste(DBI::dbQuoteIdentifier(con, vars), collapse = ', ')) else ''}
-      FROM source_tbl_raw;
-    "
-    )
+  ducksf_build_proj_views(
+    con = con,
+    sidQN = sidQN,
+    tidQN = tidQN,
+    src_lit = src_lit,
+    trg_lit = trg_lit,
+    join_lit = join_lit,
+    same_src_join = same_src_join,
+    same_trg_join = same_trg_join,
+    vars = vars,
+    source_tbl_raw = "source_tbl_raw",
+    target_tbl_raw = "target_tbl_raw",
+    src_geom_name = "geometry",
+    trg_geom_name = "geometry"
   )
 
-  if (!isTRUE(same_src_join)) {
-    DBI::dbExecute(
-      con,
-      glue::glue(
-        "
-        CREATE OR REPLACE VIEW source_proj AS
-        SELECT sid, ST_Transform(geom, {src_lit}, {join_lit}) AS geom
-               {if (length(vars)) paste0(', ', paste(DBI::dbQuoteIdentifier(con, vars), collapse = ', ')) else ''}
-        FROM source_tbl;
-      "
-      )
-    )
-  } else {
-    DBI::dbExecute(
-      con,
-      "CREATE OR REPLACE VIEW source_proj AS SELECT * FROM source_tbl;"
-    )
-  }
-
-  # TARGET -> target_tbl (id + geom)
-  DBI::dbExecute(
+  # ---- Overlap ----
+  ducksf_build_overlap(
     con,
-    glue::glue(
-      "
-      CREATE OR REPLACE VIEW target_tbl AS
-      SELECT
-        {DBI::dbQuoteIdentifier(con, tidQN)} AS tid,
-        {DBI::dbQuoteIdentifier(con, trg_geom_name)} AS geom
-      FROM target_tbl_raw;
-    "
-    )
+    src_view = "source_proj",
+    trg_view = "target_proj",
+    out_view = "overlap",
+    join_pred = "intersects",
+    measure = "area",
+    keep_geom = FALSE,
+    materialize = FALSE,
+    prefilter_bbox = FALSE
   )
 
-  if (!isTRUE(same_trg_join)) {
-    DBI::dbExecute(
-      con,
-      glue::glue(
-        "
-        CREATE OR REPLACE VIEW target_proj AS
-        SELECT tid, ST_Transform(geom, {trg_lit}, {join_lit}) AS geom
-        FROM target_tbl;
-      "
-      )
-    )
-  } else {
-    DBI::dbExecute(
-      con,
-      "CREATE OR REPLACE VIEW target_proj AS SELECT * FROM target_tbl;"
-    )
-  }
-
-  # ---- Overlap AREAS ONLY, compute intersection once; keep table skinny ----
-  DBI::dbExecute(
-    con,
-    "
-      CREATE OR REPLACE VIEW overlap AS
-      SELECT s.sid, t.tid,
-             ST_Area(ST_Intersection(t.geom, s.geom)) AS overlap_area
-      FROM target_proj t
-      JOIN source_proj s
-        ON ST_Intersects(t.geom, s.geom);
-     "
-  )
-
-  # ---- Denominators (unchanged logic) ----
+  # ---- Denominators ----
   if (type %in% c("extensive", "mixed")) {
-    if (weight == "sum") {
-      DBI::dbExecute(
-        con,
-        "
-        CREATE OR REPLACE VIEW total_by_sid AS
-        SELECT sid, SUM(overlap_area) AS total_area_sid
-        FROM overlap GROUP BY sid;
-        "
-      )
-    } else {
-      DBI::dbExecute(
-        con,
-        "
-        CREATE OR REPLACE VIEW total_by_sid AS
-        SELECT sid, ST_Area(geom) AS total_area_sid
-        FROM source_proj;
-        "
-      )
-    }
+    ducksf_build_denom(
+      con,
+      by = "sid",
+      mode = weight, # "sum" or "total"
+      measure = "area",
+      overlap_view = "overlap",
+      src_proj_view = "source_proj",
+      out_view = "total_by_sid",
+      alias = "total_area_sid"
+    )
   }
   if (type %in% c("intensive", "mixed")) {
-    DBI::dbExecute(
+    ducksf_build_denom(
       con,
-      "
-      CREATE OR REPLACE VIEW total_by_tid AS
-      SELECT tid, SUM(overlap_area) AS total_area_tid
-      FROM overlap GROUP BY tid;
-      "
+      by = "tid",
+      mode = "sum",
+      measure = "area",
+      overlap_view = "overlap",
+      out_view = "total_by_tid",
+      alias = "total_area_tid"
     )
   }
 
   # ---- Single-pass aggregation for all variables (replaces per-var loops) ----
-  # Build SELECT expressions
-  ex_exprs <- character(0)
-  if (length(ex_vars)) {
-    ex_exprs <- paste0(
-      "SUM( (src.",
-      DBI::dbQuoteIdentifier(con, ex_vars),
-      ") * o.overlap_area / NULLIF(tbs.total_area_sid, 0) ) AS ",
-      DBI::dbQuoteIdentifier(con, ex_vars)
-    )
-  }
-
-  in_exprs <- character(0)
-  if (length(in_vars)) {
-    in_exprs <- paste0(
-      "SUM( (src.",
-      DBI::dbQuoteIdentifier(con, in_vars),
-      ") * o.overlap_area / NULLIF(tbt.total_area_tid, 0) ) AS ",
-      DBI::dbQuoteIdentifier(con, in_vars)
-    )
-  }
-
-  select_expr <- paste(c(ex_exprs, in_exprs), collapse = ",\n      ")
-
-  DBI::dbExecute(
+  ducksf_compile_aggs(
     con,
-    glue::glue(
-      "
-    CREATE OR REPLACE VIEW interpolated_all AS
-    SELECT
-      o.tid
-      { if (nzchar(select_expr)) paste0(',\n      ', select_expr) else '' }
-    FROM overlap o
-    { if (length(vars)    > 0) 'JOIN source_proj src USING (sid)' else '' }
-    { if (length(ex_vars) > 0) 'LEFT JOIN total_by_sid tbs USING (sid)' else '' }
-    { if (length(in_vars) > 0) 'LEFT JOIN total_by_tid tbt USING (tid)' else '' }
-    GROUP BY o.tid;
-    "
-    )
+    ex_vars = ex_vars,
+    in_vars = in_vars,
+    measure = "area",
+    overlap_view = "overlap",
+    source_proj_view = "source_proj",
+    denom_sid_view = "total_by_sid",
+    denom_tid_view = "total_by_tid",
+    denom_sid_alias = "total_area_sid",
+    denom_tid_alias = "total_area_tid",
+    out_view = "interpolated_all",
+    tid_col = "tid"
   )
 
   # ---- sf-ready view in original target CRS (unchanged) ----
-  DBI::dbExecute(
+  ducksf_build_interpolated_sf_view(
     con,
-    "
-    CREATE OR REPLACE VIEW interpolated_sf AS
-    SELECT t.tid, t.geom AS geometry, ia.*
-    FROM target_tbl t
-    LEFT JOIN interpolated_all ia USING (tid);
-    "
+    target_tbl = "target_tbl",
+    ia_view = "interpolated_all",
+    out_view = "interpolated_sf"
   )
 
-  # ---- Export (unchanged) ----
-  if (output == "sf") {
-    x <- dplyr::tbl(con, "interpolated_sf") |> arrow::to_arrow()
-    out <- sf::st_as_sf(x, crs = target_crs)
-    out <- dplyr::left_join(
-      target_sf,
-      dplyr::as_tibble(out),
-      by = dplyr::join_by(!!tidQN == "tid")
-    )
-    if (nameConflict) {
-      out <- dplyr::rename(out, !!rlang::set_names(rlang::sym(tidQN), tidOrig))
-    }
-  } else {
-    x <- dplyr::tbl(con, "interpolated_all") |> arrow::to_arrow()
-    out <- dplyr::as_tibble(x)
-    tgt_id <- dplyr::select(
-      sf::st_drop_geometry(target_sf),
-      !!rlang::sym(tidQN)
-    )
-    out <- dplyr::left_join(tgt_id, out, by = dplyr::join_by(!!tidQN == "tid"))
-    if (nameConflict) {
-      out <- dplyr::rename(out, !!rlang::set_names(rlang::sym(tidQN), tidOrig))
-    }
-  }
+  # ---- collect output ----
+  out <- ducksf_collect_output(
+    con,
+    output = output,
+    target_sf = target_sf,
+    target_crs = target_crs,
+    tidQN = tidQN,
+    nameConflict = nameConflict,
+    tidOrig = tidOrig,
+    ia_view = "interpolated_all",
+    isf_view = "interpolated_sf"
+  )
 
   # ---- keep_NA: drop targets with no contributions in requested vars ----
-  if (!isTRUE(keep_NA) && length(vars_used)) {
-    if (output == "sf") {
-      df <- sf::st_drop_geometry(out)
-      keep_t <- rowSums(!is.na(df[, vars_used, drop = FALSE])) > 0
-      out <- out[keep_t, , drop = FALSE]
-    } else {
-      keep_t <- rowSums(!is.na(out[, vars_used, drop = FALSE])) > 0
-      out <- out[keep_t, , drop = FALSE]
-    }
-  }
+  out <- ducksf_apply_keep_na(
+    out,
+    output = output,
+    vars_used = vars_used,
+    keep_NA = keep_NA
+  )
 
   out
 }
