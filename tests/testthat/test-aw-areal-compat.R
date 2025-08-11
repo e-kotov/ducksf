@@ -48,7 +48,7 @@ test_that("ducksf core matches areal for extensive vars (mass-preserving)", {
     .ducksf_atol + .ducksf_rtol * max(abs(cmp$TOTAL_E_areal), na.rm = TRUE)
   )
 
-  # 2) Mass preservation (extensive) — both should equal source sum
+  # 2) Mass preservation (extensive) both should equal source sum
   src_total <- sum_numeric(race$TOTAL_E)
   areal_total <- sum_numeric(cmp$TOTAL_E_areal)
   ducksf_total <- sum_numeric(cmp$TOTAL_E_ducksf)
