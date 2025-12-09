@@ -20,7 +20,7 @@ status](https://www.r-pkg.org/badges/version/ducksf.png)](https://CRAN.R-project
 > lightning fast aerial-weighted interpolation in
 > [`{duckspatial}`](https://cidree.github.io/duckspatial/) via
 > [`duckspatial::ddbs_interpolate_aw()`](https://cidree.github.io/duckspatial/reference/ddbs_interpolate_aw.html)
-> funciton.
+> function.
 
 This package provides some alternatives to sf functions, which are
 implemented using duckdb and geoarrow. So far the only implemented
