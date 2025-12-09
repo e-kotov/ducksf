@@ -56,3 +56,48 @@ test_that("ducksf core matches areal for extensive vars (mass-preserving)", {
   expect_true(almost_equal(areal_total, src_total))
   expect_true(almost_equal(ducksf_total, src_total))
 })
+
+
+test_that("ddbs_interpolate_aw handles different CRS", {
+  # Create a source layer with a different CRS (WGS 84)
+  race_wgs84 <- sf::st_transform(race, 4326)
+
+  # Result with native CRS
+  res_native_crs <- dst_interpolate_aw(
+    target_sf = wards,
+    tid = WARD,
+    source_sf = race,
+    sid = GEOID,
+    extensive = "TOTAL_E"
+  )
+
+  # Result with different source CRS should be identical after internal reprojection
+  res_diff_crs <- dst_interpolate_aw(
+    target_sf = wards,
+    tid = WARD,
+    source_sf = race_wgs84,
+    sid = GEOID,
+    extensive = "TOTAL_E"
+  )
+
+  # Result with an explicitly provided join_crs
+  res_join_crs <- dst_interpolate_aw(
+    target = wards,
+    tid = WARD,
+    source = race_wgs84,
+    sid = GEOID,
+    extensive = "TOTAL_E",
+    join_crs = 3857 # Web Mercator
+  )
+
+  testthat::expect_equal(
+    res_native_crs$TOTAL_E,
+    res_diff_crs$TOTAL_E,
+    tolerance = 1e-6
+  )
+  testthat::expect_equal(
+    res_native_crs$TOTAL_E,
+    res_join_crs$TOTAL_E,
+    tolerance = 1e-6
+  )
+})
