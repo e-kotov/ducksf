@@ -65,6 +65,10 @@
 </div>
 <!-- badges: start -->
 
+<blockquote>
+<p>[!CAUTION]</p>
+<p>This package is not developed anymore, but you can access its lightning fast aerial-weighted interpolation in <a href="https://cidree.github.io/duckspatial/" class="external-link"><code>{duckspatial}</code></a> via <a href="https://cidree.github.io/duckspatial/reference/ddbs_interpolate_aw.html" class="external-link"><code>duckspatial::ddbs_interpolate_aw()</code></a> function.</p>
+</blockquote>
 <p>This package provides some alternatives to sf functions, which are implemented using duckdb and geoarrow. So far the only implemented function is areal interpolation working similar to the one found in ‘areal’ package, but much faster. I have no idea where this project will go, use at your own risk.</p>
 <p><code>ducksf</code> provides <strong>fast, DuckDB Spatial–backed spatial data operations</strong> for R,<br>
 with a current focus on <strong>areal-weighted interpolation</strong> as a drop-in alternative to<br><code><a href="https://r-spatial.github.io/sf/reference/interpolate_aw.html" class="external-link">sf::st_interpolate_aw()</a></code> and <code><a href="https://slu-openGIS.github.io/areal/reference/aw_interpolate.html" class="external-link">areal::aw_interpolate()</a></code>.</p>
@@ -211,6 +215,7 @@ with a current focus on <strong>areal-weighted interpolation</strong> as a drop-
 <span><span class="va">pop_fr</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu">mask</span><span class="op">(</span><span class="va">pop_fr</span>, <span class="va">fr2_mainland</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># project the raster to EPSG:3035 (ETRS89 / LAEA Europe)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span><span class="st">"PROJ_LIB"</span><span class="op">=</span><span class="st">"/opt/homebrew/share/proj"</span><span class="op">)</span></span>
 <span><span class="va">pop_fr</span> <span class="op">&lt;-</span> <span class="fu">terra</span><span class="fu">::</span><span class="fu">project</span><span class="op">(</span></span>
 <span>  <span class="va">pop_fr</span>,</span>
 <span>  <span class="st">"EPSG:3035"</span>,</span>
