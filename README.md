@@ -14,6 +14,14 @@ status](https://www.r-pkg.org/badges/version/ducksf.png)](https://CRAN.R-project
 <!-- [![Codecov test coverage](https://codecov.io/gh/e-kotov/ducksf/graph/badge.svg)](https://app.codecov.io/gh/e-kotov/ducksf) -->
 <!-- badges: end -->
 
+> [!CAUTION]
+>
+> This package is not developed anymore, but you can access its
+> lightning fast aerial-weighted interpolation in
+> [`{duckspatial}`](https://cidree.github.io/duckspatial/) via
+> [`duckspatial::ddbs_interpolate_aw()`](https://cidree.github.io/duckspatial/reference/ddbs_interpolate_aw.html)
+> funciton.
+
 This package provides some alternatives to sf functions, which are
 implemented using duckdb and geoarrow. So far the only implemented
 function is areal interpolation working similar to the one found in
@@ -201,6 +209,7 @@ pop_fr <- terra::crop(
 pop_fr <- terra::mask(pop_fr, fr2_mainland)
 
 # project the raster to EPSG:3035 (ETRS89 / LAEA Europe)
+Sys.setenv("PROJ_LIB"="/opt/homebrew/share/proj")
 pop_fr <- terra::project(
   pop_fr,
   "EPSG:3035",
